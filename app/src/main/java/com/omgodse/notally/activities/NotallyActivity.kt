@@ -83,12 +83,12 @@ abstract class NotallyActivity(private val type: Type) : AppCompatActivity() {
                     menu.add(R.string.archive, R.drawable.archive) { archive() }
                 }
                 Folder.DELETED -> {
-                    menu.add(R.string.restore, R.drawable.restore) { restore() }
+                    menu.add(R.string.restore, R.drawable.restore) { restore(Constants.DeletedResultValue) }
                     menu.add(R.string.delete_forever, R.drawable.delete) { deleteForever(R.string.delete_note_forever) }
                 }
                 Folder.ARCHIVED -> {
                     menu.add(R.string.delete, R.drawable.delete) { delete() }
-                    menu.add(R.string.unarchive, R.drawable.unarchive) { restore() }
+                    menu.add(R.string.unarchive, R.drawable.unarchive) { restore(Constants.ArchivedResultValue) }
                 }
             }
         }
@@ -153,9 +153,13 @@ abstract class NotallyActivity(private val type: Type) : AppCompatActivity() {
         onBackPressed()
     }
 
-    private fun restore() {
+    private fun restore(value: String) {
         model.restoreBaseNote()
-        onBackPressed()
+        model.saveNote {
+            val intent = Intent().putExtra(Constants.RestoreResultKey, value)
+            setResult(RESULT_OK, intent)
+            finish()
+        }
     }
 
     private fun archive() {
