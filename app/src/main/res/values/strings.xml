@@ -13,6 +13,7 @@
     <string name="filter">Filter</string>
     <string name="search">Search</string>
     <string name="delete">Delete</string>
+    <string name="delete_permanently">Delete Permanently</string>
     <string name="restore">Restore</string>
     <string name="archive">Archive</string>
     <string name="unarchive">Unarchive</string>
@@ -52,6 +53,7 @@
     <string name="create_new">No labels yet. Create one?</string>
     <string name="delete_all_notes">Delete all notes?</string>
     <string name="delete_note_forever">Delete note forever?</string>
+    <string name="delete_note_permanently">Delete note permanently?</string>
     <string name="your_notes_associated">Your notes attached to this label will not be deleted</string>
 
     <!-- Lists and Notes -->

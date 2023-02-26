@@ -77,11 +77,14 @@ abstract class NotallyActivity(private val type: Type) : AppCompatActivity() {
             when (model.folder) {
                 Folder.NOTES -> {
                     menu.add(R.string.delete, R.drawable.delete) { delete() }
+                    menu.add(R.string.delete_permanently, R.drawable.delete) {
+                        deleteForever(R.string.delete_note_permanently)
+                    }
                     menu.add(R.string.archive, R.drawable.archive) { archive() }
                 }
                 Folder.DELETED -> {
                     menu.add(R.string.restore, R.drawable.restore) { restore() }
-                    menu.add(R.string.delete_forever, R.drawable.delete) { deleteForever() }
+                    menu.add(R.string.delete_forever, R.drawable.delete) { deleteForever(R.string.delete_note_forever) }
                 }
                 Folder.ARCHIVED -> {
                     menu.add(R.string.delete, R.drawable.delete) { delete() }
@@ -160,9 +163,9 @@ abstract class NotallyActivity(private val type: Type) : AppCompatActivity() {
         onBackPressed()
     }
 
-    private fun deleteForever() {
+    private fun deleteForever(messageId: Int) {
         MaterialAlertDialogBuilder(this)
-            .setMessage(R.string.delete_note_forever)
+            .setMessage(messageId)
             .setPositiveButton(R.string.delete) { dialog, which ->
                 model.deleteBaseNoteForever {
                     super.onBackPressed()
