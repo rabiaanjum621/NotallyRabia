@@ -132,6 +132,7 @@ abstract class NotallyActivity(private val type: Type) : AppCompatActivity() {
         val body = when (type) {
             Type.NOTE -> model.body
             Type.LIST -> Operations.getBody(model.items)
+            Type.PHONE -> model.body
         }
         Operations.shareNote(this, model.title, body)
     }
@@ -197,9 +198,16 @@ abstract class NotallyActivity(private val type: Type) : AppCompatActivity() {
             Type.NOTE -> {
                 binding.AddItem.visibility = View.GONE
                 binding.RecyclerView.visibility = View.GONE
+                binding.EnterNumber.visibility = View.GONE
             }
             Type.LIST -> {
                 binding.EnterBody.visibility = View.GONE
+                binding.EnterNumber.visibility = View.GONE
+            }
+            Type.PHONE -> {
+                binding.AddItem.visibility = View.GONE
+                binding.EnterBody.visibility = View.GONE
+                binding.RecyclerView.visibility = View.GONE
             }
         }
 

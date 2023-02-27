@@ -23,6 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.omgodse.notally.MenuDialog
 import com.omgodse.notally.R
 import com.omgodse.notally.activities.MakeList
+import com.omgodse.notally.activities.PhoneNumberNote
 import com.omgodse.notally.activities.TakeNote
 import com.omgodse.notally.databinding.DialogColorBinding
 import com.omgodse.notally.databinding.FragmentNotesBinding
@@ -96,6 +97,7 @@ abstract class NotallyFragment : Fragment(), ItemListener {
                     when (item.type) {
                         Type.NOTE -> goToActivityForResult(TakeNote::class.java, item, Constants.RequestCodeRestore)
                         Type.LIST -> goToActivity(MakeList::class.java, item)
+                        Type.PHONE -> goToActivity(PhoneNumberNote::class.java,item)
                     }
                 }
             }
@@ -189,6 +191,7 @@ abstract class NotallyFragment : Fragment(), ItemListener {
         val body = when (baseNote.type) {
             Type.NOTE -> baseNote.body.applySpans(baseNote.spans)
             Type.LIST -> Operations.getBody(baseNote.items)
+            Type.PHONE -> baseNote.body
         }
         Operations.shareNote(requireContext(), baseNote.title, body)
     }

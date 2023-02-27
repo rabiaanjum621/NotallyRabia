@@ -301,6 +301,7 @@ class BaseNoteModel(private val app: Application) : AndroidViewModel(app) {
         val body = when (baseNote.type) {
             Type.NOTE -> baseNote.body
             Type.LIST -> Operations.getBody(baseNote.items)
+            Type.PHONE -> baseNote.body
         }
 
         if (baseNote.title.isNotEmpty()) {
@@ -395,6 +396,11 @@ class BaseNoteModel(private val app: Application) : AndroidViewModel(app) {
                 val items = JSONArray(baseNote.items.map { item -> item.toJSONObject() })
                 jsonObject.put("items", items)
             }
+            Type.PHONE -> {
+                val spans = JSONArray(baseNote.spans.map { representation -> representation.toJSONObject() })
+                jsonObject.put("body", baseNote.body)
+                jsonObject.put("spans", spans)
+            }
         }
 
         return jsonObject.toString(2)
@@ -427,6 +433,10 @@ class BaseNoteModel(private val app: Application) : AndroidViewModel(app) {
                     append("<li><input type=\"checkbox\" $checked>$body</li>")
                 }
                 append("</ol>")
+            }
+            Type.PHONE -> {
+                val body = baseNote.body.applySpans(baseNote.spans).toHtml()
+                append(body)
             }
         }
         append("</body></html>")

@@ -13,7 +13,7 @@
     <string name="filter">Filter</string>
     <string name="search">Search</string>
     <string name="delete">Delete</string>
-    <string name="delete_permanently">Delete Permanently</string>
+    <string name="delete_permanently" translatable="false">Delete Permanently</string>
     <string name="restore">Restore</string>
     <string name="archive">Archive</string>
     <string name="unarchive">Unarchive</string>
@@ -37,6 +37,7 @@
     <string name="open_link">Open link</string>
     <string name="make_list">Make list</string>
     <string name="take_note">Take note</string>
+    <string name="add_phone_note" translatable="false">Add Phone Number</string>
     <string name="add_label">Add label</string>
     <string name="export">Export</string>
     <string name="pdf" translatable="false">PDF</string>
@@ -53,11 +54,12 @@
     <string name="create_new">No labels yet. Create one?</string>
     <string name="delete_all_notes">Delete all notes?</string>
     <string name="delete_note_forever">Delete note forever?</string>
-    <string name="delete_note_permanently">Delete note permanently?</string>
+    <string name="delete_note_permanently" translatable="false">Delete note permanently?</string>
     <string name="your_notes_associated">Your notes attached to this label will not be deleted</string>
 
     <!-- Lists and Notes -->
     <string name="note">Note</string>
+    <string name="number" translatable="false">Number</string>
     <string name="item">Item</string>
     <string name="date">Date</string>
     <string name="title">Title</string>
@@ -74,6 +76,7 @@
     <string name="saved_to_device">Saved to device</string>
     <string name="saved_to_notally">Saved to Notally</string>
     <string name="empty_note">Empty note</string>
+    <string name="empty_number" translatable="false">Empty number</string>
     <string name="empty_list">Empty list</string>
     <string name="cant_open_link">Can\'t open link</string>
     <string name="invalid_backup">Invalid backup</string>

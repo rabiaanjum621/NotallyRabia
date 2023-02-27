@@ -60,6 +60,7 @@ class BaseNoteVH(
         when (baseNote.type) {
             Type.NOTE -> bindNote(baseNote)
             Type.LIST -> bindList(baseNote)
+            Type.PHONE -> bindNote(baseNote)
         }
 
         setDate(baseNote)
@@ -142,6 +143,7 @@ class BaseNoteVH(
         return when (baseNote.type) {
             Type.NOTE -> baseNote.title.isBlank() && baseNote.body.isBlank()
             Type.LIST -> baseNote.title.isBlank() && baseNote.items.isEmpty()
+            Type.PHONE -> baseNote.title.isBlank() && baseNote.body.isBlank()
         }
     }
 
@@ -149,6 +151,7 @@ class BaseNoteVH(
         return when (baseNote.type) {
             Type.NOTE -> R.string.empty_note
             Type.LIST -> R.string.empty_list
+            Type.PHONE -> R.string.empty_number
         }
     }
 

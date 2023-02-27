@@ -57,6 +57,10 @@ class MainActivity : AppCompatActivity() {
                     val intent = Intent(this, TakeNote::class.java)
                     startActivity(intent)
                 }
+                .add(R.string.add_phone_note, R.drawable.add){
+                    val intent = Intent(this, PhoneNumberNote::class.java)
+                    startActivity(intent)
+                }
                 .show()
         }
     }
