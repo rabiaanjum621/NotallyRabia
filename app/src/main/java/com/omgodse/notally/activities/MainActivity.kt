@@ -11,6 +11,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.navOptions
 import androidx.navigation.ui.AppBarConfiguration
@@ -19,6 +20,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.omgodse.notally.MenuDialog
 import com.omgodse.notally.R
 import com.omgodse.notally.databinding.ActivityMainBinding
+import com.omgodse.notally.miscellaneous.Constants
 import com.omgodse.notally.viewmodels.BaseNoteModel
 
 class MainActivity : AppCompatActivity() {
@@ -43,8 +45,19 @@ class MainActivity : AppCompatActivity() {
         setupMenu()
         setupNavigation()
         setupSearch()
+        observeRestore()
     }
 
+    private fun observeRestore() {
+        model.restoreLiveData.observe(this) {
+            when (it) {
+                Constants.DeletedResultValue ->
+                    findNavController(R.id.NavHostFragment).navigate(R.id.action_Deleted_to_Notes)
+                Constants.ArchivedResultValue ->
+                    findNavController(R.id.NavHostFragment).navigate(R.id.action_Archived_to_Notes)
+            }
+        }
+    }
 
     private fun setupFAB() {
         binding.TakeNoteFAB.setOnClickListener {
@@ -55,6 +68,10 @@ class MainActivity : AppCompatActivity() {
                 }
                 .add(R.string.take_note, R.drawable.edit) {
                     val intent = Intent(this, TakeNote::class.java)
+                    startActivity(intent)
+                }
+                .add(R.string.add_phone_note, R.drawable.phone){
+                    val intent = Intent(this, PhoneNumberNote::class.java)
                     startActivity(intent)
                 }
                 .show()

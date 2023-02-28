@@ -98,6 +98,20 @@
                 app:drawableStartCompat="@drawable/add"
                 app:drawableTint="?android:textColorHint" />
 
+            <com.omgodse.notally.OverflowEditText
+                android:id="@+id/EnterNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/phone_box_border"
+                android:hint="@string/number"
+                android:inputType="phone"
+                android:paddingStart="24dp"
+                android:paddingTop="16dp"
+                android:paddingEnd="24dp"
+                android:paddingBottom="16dp"
+                android:textAppearance="?attr/textAppearanceBody1" />
+
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/LabelGroup"
                 android:layout_width="match_parent"

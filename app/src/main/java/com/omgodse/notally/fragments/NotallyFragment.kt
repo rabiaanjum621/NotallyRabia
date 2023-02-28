@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -22,6 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.omgodse.notally.MenuDialog
 import com.omgodse.notally.R
 import com.omgodse.notally.activities.MakeList
+import com.omgodse.notally.activities.PhoneNumberNote
 import com.omgodse.notally.activities.TakeNote
 import com.omgodse.notally.databinding.DialogColorBinding
 import com.omgodse.notally.databinding.FragmentNotesBinding
@@ -66,9 +68,22 @@ abstract class NotallyFragment : Fragment(), ItemListener {
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
-        if (requestCode == Constants.RequestCodeExportFile && resultCode == Activity.RESULT_OK) {
-            intent?.data?.let { uri ->
-                model.writeCurrentFileToUri(uri)
+        if(resultCode == Activity.RESULT_OK) {
+            when(requestCode) {
+                Constants.RequestCodeExportFile -> {
+                    intent?.data?.let { uri ->
+                        model.writeCurrentFileToUri(uri)
+                    }
+                }
+                Constants.RequestCodeRestore -> {
+                    val receivedCode = intent?.getStringExtra(Constants.RestoreResultKey)
+                    if (receivedCode == Constants.DeletedResultValue) {
+                        findNavController().navigate(R.id.action_Deleted_to_Notes)
+                    }
+                    if (receivedCode == Constants.ArchivedResultValue) {
+                        findNavController().navigate(R.id.action_Archived_to_Notes)
+                    }
+                }
             }
         }
     }
@@ -80,8 +95,9 @@ abstract class NotallyFragment : Fragment(), ItemListener {
             adapter?.currentList?.get(position)?.let { item ->
                 if (item is BaseNote) {
                     when (item.type) {
-                        Type.NOTE -> goToActivity(TakeNote::class.java, item)
+                        Type.NOTE -> goToActivityForResult(TakeNote::class.java, item, Constants.RequestCodeRestore)
                         Type.LIST -> goToActivity(MakeList::class.java, item)
+                        Type.PHONE -> goToActivityForResult(PhoneNumberNote::class.java,item, Constants.RequestCodeRestore)
                     }
                 }
             }
@@ -147,12 +163,12 @@ abstract class NotallyFragment : Fragment(), ItemListener {
                 dialog.add(R.string.change_color) { color(baseNote) }
             }
             Folder.DELETED -> {
-                dialog.add(R.string.restore) { model.restoreBaseNote(baseNote.id) }
+                dialog.add(R.string.restore) { model.restoreBaseNote(baseNote.id, Constants.DeletedResultValue) }
                 dialog.add(R.string.delete_forever) { delete(baseNote) }
             }
             Folder.ARCHIVED -> {
                 dialog.add(R.string.delete) { model.moveBaseNoteToDeleted(baseNote.id) }
-                dialog.add(R.string.unarchive) { model.restoreBaseNote(baseNote.id) }
+                dialog.add(R.string.unarchive) { model.restoreBaseNote(baseNote.id, Constants.ArchivedResultValue) }
             }
         }
         dialog.show()
@@ -164,11 +180,18 @@ abstract class NotallyFragment : Fragment(), ItemListener {
         startActivity(intent)
     }
 
+    private fun goToActivityForResult(activity: Class<*>, baseNote: BaseNote, code: Int) {
+        val intent = Intent(requireContext(), activity)
+        intent.putExtra(Constants.SelectedBaseNote, baseNote)
+        startActivityForResult(intent, code)
+    }
+
 
     private fun share(baseNote: BaseNote) {
         val body = when (baseNote.type) {
             Type.NOTE -> baseNote.body.applySpans(baseNote.spans)
             Type.LIST -> Operations.getBody(baseNote.items)
+            Type.PHONE -> baseNote.body
         }
         Operations.shareNote(requireContext(), baseNote.title, body)
     }

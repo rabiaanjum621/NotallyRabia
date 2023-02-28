@@ -77,15 +77,18 @@ abstract class NotallyActivity(private val type: Type) : AppCompatActivity() {
             when (model.folder) {
                 Folder.NOTES -> {
                     menu.add(R.string.delete, R.drawable.delete) { delete() }
+                    menu.add(R.string.delete_permanently, R.drawable.delete) {
+                        deleteForever(R.string.delete_note_permanently)
+                    }
                     menu.add(R.string.archive, R.drawable.archive) { archive() }
                 }
                 Folder.DELETED -> {
-                    menu.add(R.string.restore, R.drawable.restore) { restore() }
-                    menu.add(R.string.delete_forever, R.drawable.delete) { deleteForever() }
+                    menu.add(R.string.restore, R.drawable.restore) { restore(Constants.DeletedResultValue) }
+                    menu.add(R.string.delete_forever, R.drawable.delete) { deleteForever(R.string.delete_note_forever) }
                 }
                 Folder.ARCHIVED -> {
                     menu.add(R.string.delete, R.drawable.delete) { delete() }
-                    menu.add(R.string.unarchive, R.drawable.unarchive) { restore() }
+                    menu.add(R.string.unarchive, R.drawable.unarchive) { restore(Constants.ArchivedResultValue) }
                 }
             }
         }
@@ -129,6 +132,7 @@ abstract class NotallyActivity(private val type: Type) : AppCompatActivity() {
         val body = when (type) {
             Type.NOTE -> model.body
             Type.LIST -> Operations.getBody(model.items)
+            Type.PHONE -> model.body
         }
         Operations.shareNote(this, model.title, body)
     }
@@ -150,9 +154,13 @@ abstract class NotallyActivity(private val type: Type) : AppCompatActivity() {
         onBackPressed()
     }
 
-    private fun restore() {
+    private fun restore(value: String) {
         model.restoreBaseNote()
-        onBackPressed()
+        model.saveNote {
+            val intent = Intent().putExtra(Constants.RestoreResultKey, value)
+            setResult(RESULT_OK, intent)
+            finish()
+        }
     }
 
     private fun archive() {
@@ -160,9 +168,9 @@ abstract class NotallyActivity(private val type: Type) : AppCompatActivity() {
         onBackPressed()
     }
 
-    private fun deleteForever() {
+    private fun deleteForever(messageId: Int) {
         MaterialAlertDialogBuilder(this)
-            .setMessage(R.string.delete_note_forever)
+            .setMessage(messageId)
             .setPositiveButton(R.string.delete) { dialog, which ->
                 model.deleteBaseNoteForever {
                     super.onBackPressed()
@@ -190,9 +198,17 @@ abstract class NotallyActivity(private val type: Type) : AppCompatActivity() {
             Type.NOTE -> {
                 binding.AddItem.visibility = View.GONE
                 binding.RecyclerView.visibility = View.GONE
+                binding.EnterNumber.visibility = View.GONE
             }
             Type.LIST -> {
                 binding.EnterBody.visibility = View.GONE
+                binding.EnterNumber.visibility = View.GONE
+            }
+            Type.PHONE -> {
+                binding.EnterTitle.hint = resources.getString(R.string.name)
+                binding.AddItem.visibility = View.GONE
+                binding.EnterBody.visibility = View.GONE
+                binding.RecyclerView.visibility = View.GONE
             }
         }
 
