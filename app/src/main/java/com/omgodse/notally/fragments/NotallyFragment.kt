@@ -163,12 +163,12 @@ abstract class NotallyFragment : Fragment(), ItemListener {
                 dialog.add(R.string.change_color) { color(baseNote) }
             }
             Folder.DELETED -> {
-                dialog.add(R.string.restore) { model.restoreBaseNote(baseNote.id) }
+                dialog.add(R.string.restore) { model.restoreBaseNote(baseNote.id, Constants.DeletedResultValue) }
                 dialog.add(R.string.delete_forever) { delete(baseNote) }
             }
             Folder.ARCHIVED -> {
                 dialog.add(R.string.delete) { model.moveBaseNoteToDeleted(baseNote.id) }
-                dialog.add(R.string.unarchive) { model.restoreBaseNote(baseNote.id) }
+                dialog.add(R.string.unarchive) { model.restoreBaseNote(baseNote.id, Constants.ArchivedResultValue) }
             }
         }
         dialog.show()

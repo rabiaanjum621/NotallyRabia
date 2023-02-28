@@ -11,6 +11,8 @@ import android.text.Html
 import android.widget.Toast
 import androidx.core.text.toHtml
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.room.withTransaction
 import com.omgodse.notally.R
@@ -45,6 +47,10 @@ class BaseNoteModel(private val app: Application) : AndroidViewModel(app) {
     private val labelDao = database.labelDao
     private val commonDao = database.commonDao
     private val baseNoteDao = database.baseNoteDao
+
+    private val _restoreLiveData = MutableLiveData<String>()
+    val restoreLiveData : LiveData<String>
+        get() = _restoreLiveData
 
     private val labelCache = HashMap<String, Content>()
     val formatter = getDateFormatter(app)
@@ -340,7 +346,10 @@ class BaseNoteModel(private val app: Application) : AndroidViewModel(app) {
 
     fun deleteAllBaseNotes() = executeAsync { baseNoteDao.deleteFrom(Folder.DELETED) }
 
-    fun restoreBaseNote(id: Long) = executeAsync { baseNoteDao.move(id, Folder.NOTES) }
+    fun restoreBaseNote(id: Long, restoreOption: String) = executeAsync {
+        baseNoteDao.move(id, Folder.NOTES)
+        _restoreLiveData.postValue(restoreOption)
+    }
 
     fun moveBaseNoteToDeleted(id: Long) = executeAsync { baseNoteDao.move(id, Folder.DELETED) }
 
