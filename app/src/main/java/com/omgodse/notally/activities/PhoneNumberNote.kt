@@ -13,6 +13,9 @@ class PhoneNumberNote: NotallyActivity(Type.PHONE) {
         binding.EnterTitle.setOnNextAction {
             binding.EnterNumber.requestFocus()
         }
+        if (model.isNewNote) {
+            binding.EnterNumber.requestFocus()
+        }
     }
 
     override fun setupListeners() {

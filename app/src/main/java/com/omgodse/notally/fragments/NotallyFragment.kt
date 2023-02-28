@@ -97,7 +97,7 @@ abstract class NotallyFragment : Fragment(), ItemListener {
                     when (item.type) {
                         Type.NOTE -> goToActivityForResult(TakeNote::class.java, item, Constants.RequestCodeRestore)
                         Type.LIST -> goToActivity(MakeList::class.java, item)
-                        Type.PHONE -> goToActivity(PhoneNumberNote::class.java,item)
+                        Type.PHONE -> goToActivityForResult(PhoneNumberNote::class.java,item, Constants.RequestCodeRestore)
                     }
                 }
             }

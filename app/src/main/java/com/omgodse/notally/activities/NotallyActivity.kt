@@ -205,6 +205,7 @@ abstract class NotallyActivity(private val type: Type) : AppCompatActivity() {
                 binding.EnterNumber.visibility = View.GONE
             }
             Type.PHONE -> {
+                binding.EnterTitle.hint = resources.getString(R.string.name)
                 binding.AddItem.visibility = View.GONE
                 binding.EnterBody.visibility = View.GONE
                 binding.RecyclerView.visibility = View.GONE

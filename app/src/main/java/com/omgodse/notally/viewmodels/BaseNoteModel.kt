@@ -397,9 +397,7 @@ class BaseNoteModel(private val app: Application) : AndroidViewModel(app) {
                 jsonObject.put("items", items)
             }
             Type.PHONE -> {
-                val spans = JSONArray(baseNote.spans.map { representation -> representation.toJSONObject() })
                 jsonObject.put("body", baseNote.body)
-                jsonObject.put("spans", spans)
             }
         }
 
@@ -435,7 +433,7 @@ class BaseNoteModel(private val app: Application) : AndroidViewModel(app) {
                 append("</ol>")
             }
             Type.PHONE -> {
-                val body = baseNote.body.applySpans(baseNote.spans).toHtml()
+                val body = baseNote.body
                 append(body)
             }
         }

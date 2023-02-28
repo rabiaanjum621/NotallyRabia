@@ -59,6 +59,7 @@
 
     <!-- Lists and Notes -->
     <string name="note">Note</string>
+    <string name="name" translatable="false">Name</string>
     <string name="number" translatable="false">Number</string>
     <string name="item">Item</string>
     <string name="date">Date</string>
